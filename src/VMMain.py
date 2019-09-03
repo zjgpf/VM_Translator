@@ -20,8 +20,11 @@ class VMMain:
         #parser.hasMoreCommands()
         #print(parser.nextCmd)
         while(parser.hasMoreCommands()):
-            print(parser.nextCmd)
             parser.advance()
+            print(parser.curCmd)
+            print(parser.commandType())
+            print(parser.arg1())
+            print('************************')
          
         
 

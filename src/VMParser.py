@@ -5,6 +5,7 @@ class VMParser:
         self.curCmd = None
         self.nextCmd = None
         self.curIdx = 0
+        self.curCmdArr = []
 
     def hasMoreCommands(self):
         if self.nextCmd: return True
@@ -41,13 +42,18 @@ class VMParser:
     def advance(self):
         self.curCmd = self.nextCmd
         self.nextCmd = None
+        self.curCmdArr = self.curCmd.split(' ')
 
     def commandType(self):
-        pass
+        _type = self.curCmdArr[0]
+        if _type == 'push': return 'C_PUSH'
+        elif _type == 'pop': return 'C_POP'
+        elif _type  in ['add','sub']: return 'C_ARITHMETIC'
 
     def arg1(self):
-        pass
+        if self.commandType() == 'C_ARITHMETIC': return self.curCmdArr[0]
+        else: return self.curCmdArr[1]
 
     def arg2(self):
-        pass
+        return self.curCmdArr[2]
 
