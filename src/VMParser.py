@@ -1,4 +1,4 @@
-import pdb
+ARITHMETIC_LOGICAL_COMMANDS = ['add','sub','neg','gt','lt','eq','and','or','not']
 class VMParser:
     def __init__(self, content):
         self.content = content
@@ -31,7 +31,7 @@ class VMParser:
                 if curIdx == len(content): break
             else:
                 startIdx = curIdx
-                while curIdx < len(content) and content[curIdx] != '\r': curIdx += 1
+                while curIdx < len(content) and content[curIdx] not in ['\r', '\n']: curIdx += 1
                 self.nextCmd = content[startIdx:curIdx]
                 ret = True
                 break
@@ -48,7 +48,7 @@ class VMParser:
         _type = self.curCmdArr[0]
         if _type == 'push': return 'C_PUSH'
         elif _type == 'pop': return 'C_POP'
-        elif _type  in ['add','sub']: return 'C_ARITHMETIC'
+        elif _type in ARITHMETIC_LOGICAL_COMMANDS: return 'C_ARITHMETIC'
 
     def arg1(self):
         if self.commandType() == 'C_ARITHMETIC': return self.curCmdArr[0]
