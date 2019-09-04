@@ -3,9 +3,6 @@ from VMCodeWriter import VMCodeWriter
 import sys
 import pdb
 
-ARITHMETIC_LOGICAL_SINGLE = ['neg', 'not']
-ARITHMETIC_LOGICAL_DOUBLE = ['add','sub','gt','lt','and','or','eq']
-
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/MemoryAccess/BasicTest/BasicTest.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/SimpleAdd/SimpleAdd.vm'
 class VMMain:
@@ -19,13 +16,11 @@ class VMMain:
         self.parser = VMParser(content)
         self.codeWriter = VMCodeWriter()
 
-        self.stack = []
         self.asmCmds = []
     
     def run(self):
         parser = self.parser
         codeWriter = self.codeWriter
-        stack = self.stack
         asmCmds = self.asmCmds
         while(parser.hasMoreCommands()):
             parser.advance()
@@ -33,21 +28,13 @@ class VMMain:
 
             if commandType in ['C_PUSH','C_POP']: 
                 segment,index = parser.arg1(),parser.arg2()
-                if commandType == 'C_PUSH': stack += [index]
-                else: stack.pop()
                 asmCmds += codeWriter.writePushPop(commandType, segment, index)
 
             elif commandType == 'C_ARITHMETIC':
                 cmd = parser.arg1()
-                if cmd in ARITHMETIC_LOGICAL_SINGLE:
-                    num = stack.pop()
-                    asmCmds += codeWriter.writeArithmetic(cmd, num)
-                else:
-                    num1 = stack.pop()
-                    num2 = stack.pop()
-                    asmCmds += codeWriter.writeArithmetic(cmd, num1, num2)
-        print('aaa')
-        print(asmCmds)
+                asmCmds += codeWriter.writeArithmetic(cmd)
+        with open(self.outputPath, 'w') as f:
+            f.write(''.join(asmCmds))
          
         
 

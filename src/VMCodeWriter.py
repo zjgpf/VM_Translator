@@ -2,8 +2,35 @@ class VMCodeWriter:
     def __init__(self):
         pass
 
-    def writeArithmetic(self, cmd, *numbers):
+    def writeArithmetic(self, cmd):
+        if cmd == 'add': return self.writeAdd() 
         return []
+
+    '''
+    sp--
+    D = *sp
+    sp--
+    *sp = D+*sp
+    '''
+    def writeAdd(self):
+        cmds = ["//add\n"]
+        #sp--
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+        #D=*sp
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["D=M\n"]
+        #sp--
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+        #*sp=D+*sp 
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=M+D\n"]
+        return cmds
+        
+        
 
     def writePushPop(self, cmdType, segment, index):
         if cmdType == 'C_PUSH':
