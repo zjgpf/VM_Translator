@@ -11,6 +11,7 @@ class VMCodeWriter:
     D = *sp
     sp--
     *sp = D+*sp
+    sp++
     '''
     def writeAdd(self):
         cmds = ["//add\n"]
@@ -28,6 +29,9 @@ class VMCodeWriter:
         cmds += ["@SP\n"]
         cmds += ["A=M\n"]
         cmds += ["M=M+D\n"]
+        #sp++
+        cmds += ["@SP\n"]
+        cmds += ["M=M+1\n"]
         return cmds
         
         
