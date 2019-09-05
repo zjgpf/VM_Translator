@@ -18,7 +18,7 @@ M=D
 //sp++
 @SP
 M=M+1
-//Gt
+//Or
 //sp--
 @SP
 M=M-1
@@ -29,26 +29,10 @@ D=M
 //sp--
 @SP
 M=M-1
-//D=*sp-D
+//*sp=*sp&D
 @SP
 A=M
-D=M-D
-//go to gt if D>0
-@GT
-D;JGT
-//*sp=0
-@SP
-A=M
-M=0
-//go to stop
-@STOP
-0;JMP
-(GT)
-//*sp=-1
-@SP
-A=M
-M=-1
-(STOP)
+M=M|D
 //sp++
 @SP
 M=M+1

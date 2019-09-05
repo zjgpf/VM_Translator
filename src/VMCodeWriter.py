@@ -8,6 +8,8 @@ class VMCodeWriter:
         elif cmd == 'eq': return self.writeEq() 
         elif cmd == 'lt': return self.writeLt() 
         elif cmd == 'gt': return self.writeGt() 
+        elif cmd == 'and': return self.writeAnd() 
+        elif cmd == 'or': return self.writeOr() 
         return []
 
     '''
@@ -254,8 +256,75 @@ class VMCodeWriter:
         cmds += ["M=M+1\n"]
 
         return cmds
+
+    '''
+    sp--
+    D=*sp
+    sp--
+    *sp = *sp&D
+    sp++
+    '''
+    def writeAnd(self):    
+        cmds = ["//And\n"]
+
+        cmds += ["//sp--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+
+        cmds += ["//D=*sp\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["D=M\n"]
+
+        cmds += ["//sp--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+
+        cmds += ["//*sp=*sp&D\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=M&D\n"]
+
+        cmds += ["//sp++\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M+1\n"]
         
- 
+        return cmds
+
+    '''
+    sp--
+    D=*sp
+    sp--
+    *sp = *sp|D
+    sp++
+    '''
+    def writeOr(self):    
+        cmds = ["//Or\n"]
+
+        cmds += ["//sp--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+
+        cmds += ["//D=*sp\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["D=M\n"]
+
+        cmds += ["//sp--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+
+        cmds += ["//*sp=*sp&D\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=M|D\n"]
+
+        cmds += ["//sp++\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M+1\n"]
+        
+        return cmds
+
 
     def writePushPop(self, cmdType, segment, index):
         if cmdType == 'C_PUSH':
