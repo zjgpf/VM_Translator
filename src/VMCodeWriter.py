@@ -1,3 +1,4 @@
+label_count = 0
 class VMCodeWriter:
     def __init__(self):
         pass
@@ -93,6 +94,11 @@ class VMCodeWriter:
     sp++
     '''
     def writeEq(self):    
+        global label_count
+        LABEL_EQ = "EQ"+str(label_count)
+        LABEL_STOP = "STOP"+str(label_count)
+        label_count+=1
+
         cmds = ["//Eq\n"]
 
         cmds += ["//sp--\n"]
@@ -114,7 +120,7 @@ class VMCodeWriter:
         cmds += ["D=M-D\n"]
 
         cmds += ["//go to eq if D=0\n"]
-        cmds += ["@EQ\n"]
+        cmds += [f"@{LABEL_EQ}\n"]
         cmds += ["D;JEQ\n"]
 
         cmds += ["//*sp=0\n"]
@@ -123,16 +129,16 @@ class VMCodeWriter:
         cmds += ["M=0\n"]
 
         cmds += ["//go to stop\n"]
-        cmds += ["@STOP\n"]
+        cmds += [f"@{LABEL_STOP}\n"]
         cmds += ["0;JMP\n"]
 
-        cmds += ["(EQ)\n"]
+        cmds += [f"({LABEL_EQ})\n"]
         cmds += ["//*sp=-1\n"]
         cmds += ["@SP\n"]
         cmds += ["A=M\n"]
         cmds += ["M=-1\n"]
 
-        cmds += ["(STOP)\n"]
+        cmds += [f"({LABEL_STOP})\n"]
         cmds += ["//sp++\n"]
         cmds += ["@SP\n"]
         cmds += ["M=M+1\n"]
@@ -153,6 +159,11 @@ class VMCodeWriter:
     sp++
     '''
     def writeLt(self):    
+        global label_count
+        LABEL_LT = "Lt"+str(label_count)
+        LABEL_STOP = "STOP"+str(label_count)
+        label_count+=1
+
         cmds = ["//Lt\n"]
 
         cmds += ["//sp--\n"]
@@ -174,7 +185,7 @@ class VMCodeWriter:
         cmds += ["D=M-D\n"]
 
         cmds += ["//go to lt if D=0\n"]
-        cmds += ["@LT\n"]
+        cmds += [f"@{LABEL_LT}\n"]
         cmds += ["D;JLT\n"]
 
         cmds += ["//*sp=0\n"]
@@ -183,16 +194,16 @@ class VMCodeWriter:
         cmds += ["M=0\n"]
 
         cmds += ["//go to stop\n"]
-        cmds += ["@STOP\n"]
+        cmds += [f"@{LABEL_STOP}\n"]
         cmds += ["0;JMP\n"]
 
-        cmds += ["(LT)\n"]
+        cmds += [f"({LABEL_LT})\n"]
         cmds += ["//*sp=-1\n"]
         cmds += ["@SP\n"]
         cmds += ["A=M\n"]
         cmds += ["M=-1\n"]
 
-        cmds += ["(STOP)\n"]
+        cmds += [f"({LABEL_STOP})\n"]
         cmds += ["//sp++\n"]
         cmds += ["@SP\n"]
         cmds += ["M=M+1\n"]
@@ -213,6 +224,11 @@ class VMCodeWriter:
     sp++
     '''
     def writeGt(self):    
+        global label_count
+        LABEL_GT = "GT"+str(label_count)
+        LABEL_STOP = "STOP"+str(label_count)
+        label_count+=1
+
         cmds = ["//Gt\n"]
 
         cmds += ["//sp--\n"]
@@ -234,7 +250,7 @@ class VMCodeWriter:
         cmds += ["D=M-D\n"]
 
         cmds += ["//go to gt if D>0\n"]
-        cmds += ["@GT\n"]
+        cmds += [f"@{LABEL_GT}\n"]
         cmds += ["D;JGT\n"]
 
         cmds += ["//*sp=0\n"]
@@ -243,16 +259,16 @@ class VMCodeWriter:
         cmds += ["M=0\n"]
 
         cmds += ["//go to stop\n"]
-        cmds += ["@STOP\n"]
+        cmds += [f"@{LABEL_STOP}\n"]
         cmds += ["0;JMP\n"]
 
-        cmds += ["(GT)\n"]
+        cmds += [f"({LABEL_GT})\n"]
         cmds += ["//*sp=-1\n"]
         cmds += ["@SP\n"]
         cmds += ["A=M\n"]
         cmds += ["M=-1\n"]
 
-        cmds += ["(STOP)\n"]
+        cmds += [f"({LABEL_STOP})\n"]
         cmds += ["//sp++\n"]
         cmds += ["@SP\n"]
         cmds += ["M=M+1\n"]
