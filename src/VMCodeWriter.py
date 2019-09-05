@@ -10,6 +10,8 @@ class VMCodeWriter:
         elif cmd == 'gt': return self.writeGt() 
         elif cmd == 'and': return self.writeAnd() 
         elif cmd == 'or': return self.writeOr() 
+        elif cmd == 'neg': return self.writeNeg() 
+        elif cmd == 'not': return self.writeNot() 
         return []
 
     '''
@@ -325,6 +327,53 @@ class VMCodeWriter:
         
         return cmds
 
+    '''
+    sp--
+    *sp = -*sp
+    sp++
+    '''
+    def writeNeg(self):    
+        cmds = ["//Neg\n"]
+
+        cmds += ["//sp--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+
+        cmds += ["//*sp = -*sp\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=-M\n"]
+
+        cmds += ["//sp++\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M+1\n"]
+
+        return cmds
+
+    '''
+    sp--
+    *sp = !*sp
+    sp++
+    '''
+    def writeNot(self):    
+        cmds = ["//Not\n"]
+
+        cmds += ["//sp--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+
+        cmds += ["//*sp = -*sp\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=!M\n"]
+
+        cmds += ["//sp++\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M+1\n"]
+
+        return cmds
+        
+ 
 
     def writePushPop(self, cmdType, segment, index):
         if cmdType == 'C_PUSH':

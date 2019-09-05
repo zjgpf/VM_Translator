@@ -6,4 +6,4 @@
 // Pushes and adds two constants.
 push constant 9
 push constant 8
-or
+not

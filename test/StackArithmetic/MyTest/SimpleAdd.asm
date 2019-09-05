@@ -18,21 +18,14 @@ M=D
 //sp++
 @SP
 M=M+1
-//Or
+//Not
 //sp--
 @SP
 M=M-1
-//D=*sp
+//*sp = -*sp
 @SP
 A=M
-D=M
-//sp--
-@SP
-M=M-1
-//*sp=*sp&D
-@SP
-A=M
-M=M|D
+M=!M
 //sp++
 @SP
 M=M+1
