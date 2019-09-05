@@ -5,6 +5,7 @@ import pdb
 
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/MemoryAccess/BasicTest/BasicTest.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/SimpleAdd/SimpleAdd.vm'
+DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/MyTest/SimpleAdd.vm'
 class VMMain:
     def __init__(self, inputPath):
         with open(inputPath, 'r') as f:

@@ -4,6 +4,8 @@ class VMCodeWriter:
 
     def writeArithmetic(self, cmd):
         if cmd == 'add': return self.writeAdd() 
+        elif cmd == 'sub': return self.writeSub() 
+        elif cmd == 'eq': return self.writeEq() 
         return []
 
     '''
@@ -15,25 +17,121 @@ class VMCodeWriter:
     '''
     def writeAdd(self):
         cmds = ["//add\n"]
-        #sp--
+
+        cmds += ["//sp--\n"]
         cmds += ["@SP\n"]
         cmds += ["M=M-1\n"]
-        #D=*sp
+
+        cmds += ["//D=*sp\n"]
         cmds += ["@SP\n"]
         cmds += ["A=M\n"]
         cmds += ["D=M\n"]
-        #sp--
+
+        cmds += ["//sp--\n"]
         cmds += ["@SP\n"]
         cmds += ["M=M-1\n"]
-        #*sp=D+*sp 
+
+        cmds += ["//*sp=D+*sp \n"]
         cmds += ["@SP\n"]
         cmds += ["A=M\n"]
         cmds += ["M=M+D\n"]
-        #sp++
+
+        cmds += ["//sp++\n"]
         cmds += ["@SP\n"]
         cmds += ["M=M+1\n"]
         return cmds
         
+    '''
+    sp--
+    D = *sp
+    sp--
+    *sp = *sp-D
+    sp++
+    '''
+    def writeSub(self):
+        cmds = ["//sub\n"]
+
+        cmds += ["//sp--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+        cmds += ["//D=*sp\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["D=M\n"]
+
+        cmds += ["//sp--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+
+        cmds += ["//*sp=*sp-D\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=M-D\n"]
+
+        cmds += ["//sp++\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M+1\n"]
+        return cmds
+
+    '''
+    sp--
+    D=*sp
+    sp--
+    D=*sp-D
+    @go to eq if D=0
+    *sp=0
+    goto stop
+    (eq)
+    *sp=-1
+    (stop)
+    sp++
+    '''
+    def writeEq(self):    
+        cmds = ["//Eq\n"]
+
+        cmds += ["//sp--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+
+        cmds += ["//D=*sp\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["D=M\n"]
+
+        cmds += ["//sp--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+
+        cmds += ["//D=*sp-D\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["D=M-D\n"]
+
+        cmds += ["//go to eq if D=0\n"]
+        cmds += ["@EQ\n"]
+        cmds += ["D;JEQ\n"]
+
+        cmds += ["//*sp=0\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=0\n"]
+
+        cmds += ["//go to stop\n"]
+        cmds += ["@STOP\n"]
+        cmds += ["0;JMP\n"]
+
+        cmds += ["(EQ)\n"]
+        cmds += ["//*sp=-1\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=-1\n"]
+
+        cmds += ["(STOP)\n"]
+        cmds += ["//sp++\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M+1\n"]
+        
+        return cmds
         
 
     def writePushPop(self, cmdType, segment, index):
@@ -49,13 +147,15 @@ class VMCodeWriter:
     '''
     def pushConstant(self,number):
         cmds = [f"//push constant {number}\n"]
-        #*sp=i
+
+        cmds += ["//*sp=i\n"]
         cmds += [f"@{number}\n"]
         cmds += ["D=A\n"]
         cmds += ["@SP\n"]
         cmds += ["A=M\n"]
         cmds += ["M=D\n"]
-        #sp++
+
+        cmds += ["//sp++\n"]
         cmds += ["@SP\n"]
         cmds += ["M=M+1\n"]
         return cmds
