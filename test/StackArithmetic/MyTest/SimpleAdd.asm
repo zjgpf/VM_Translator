@@ -1,6 +1,6 @@
-//push constant 8
+//push constant 9
 //*sp=i
-@8
+@9
 D=A
 @SP
 A=M
@@ -18,7 +18,7 @@ M=D
 //sp++
 @SP
 M=M+1
-//Eq
+//Gt
 //sp--
 @SP
 M=M-1
@@ -33,9 +33,9 @@ M=M-1
 @SP
 A=M
 D=M-D
-//go to eq if D=0
-@EQ
-D;JEQ
+//go to gt if D>0
+@GT
+D;JGT
 //*sp=0
 @SP
 A=M
@@ -43,7 +43,7 @@ M=0
 //go to stop
 @STOP
 0;JMP
-(EQ)
+(GT)
 //*sp=-1
 @SP
 A=M
