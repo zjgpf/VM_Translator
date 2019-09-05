@@ -1,4 +1,5 @@
 label_count = 0
+SEGMENT_POINT_MAP={'local':'LCL','argument':'ARG','this':'THIS','that':'THAT'}
 class VMCodeWriter:
     def __init__(self):
         pass
@@ -395,8 +396,66 @@ class VMCodeWriter:
         if cmdType == 'C_PUSH':
             if segment == 'constant':
                 return self.pushConstant(index)
+            elif segment in ['local','argument','this','that']:
+                return self.pushLocArgThisThat(segment,index)
+            elif segment == 'temp':
+                return self.pushTemp(index)
         else:
             print(cmdType) 
+
+    '''
+    push local/argument/this/that
+    D=segmentPointer+i;*sp=*D;sp++
+    '''
+    def pushLocArgThisThat(self, segment, index):
+        pointer = SEGMENT_POINT_MAP[segment]
+        cmds = [f"//push {segment} {index}\n"]
+
+        cmds += ["//D=segmentPointer+i\n"]
+        cmds += [f"@{index}\n"]
+        cmds += ["D=A\n"]
+        cmds += [f"@{pointer}\n"]
+        cmds += ["D=M+D\n"]
+        
+        cmds += ["//*sp=*D\n"]
+        cmds += ["A=D\n"]
+        cmds += ["D=M\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=D\n"]
+
+        cmds += ["//sp++\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M+1\n"]
+        
+        return cmds
+        
+    '''
+    push temp
+    D=5+i;*sp=*D;sp++
+    '''
+    def pushTemp(self,index):
+        cmds = [f"//push temp {index}\n"]
+
+        cmds += ["//D=5+i\n"]
+        cmds += [f"@{index}\n"]
+        cmds += ["D=A\n"]
+        cmds += [f"@5\n"]
+        cmds += ["D=A+D\n"]
+        
+        cmds += ["//*sp=*D\n"]
+        cmds += ["A=D\n"]
+        cmds += ["D=M\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=D\n"]
+
+        cmds += ["//sp++\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M+1\n"]
+        
+        return cmds
+        
 
     '''
     push constant number

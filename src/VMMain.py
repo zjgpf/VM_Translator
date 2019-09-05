@@ -7,6 +7,7 @@ DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/MemoryAccess/BasicTest/Bas
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/SimpleAdd/SimpleAdd.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/MyTest/SimpleAdd.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/StackTest/StackTest.vm'
+DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/MemoryAccess/MyTest/BasicTest.vm'
 
 class VMMain:
     def __init__(self, inputPath):
