@@ -1,8 +1,9 @@
 label_count = 0
 SEGMENT_POINT_MAP={'local':'LCL','argument':'ARG','this':'THIS','that':'THAT'}
 class VMCodeWriter:
-    def __init__(self):
-        pass
+    def __init__(self, className):
+        #className for static field
+        self.className = className
 
     def writeArithmetic(self, cmd):
         if cmd == 'add': return self.writeAdd() 
@@ -390,8 +391,6 @@ class VMCodeWriter:
 
         return cmds
         
- 
-
     def writePushPop(self, cmdType, segment, index):
         if cmdType == 'C_PUSH':
             if segment == 'constant':
@@ -402,6 +401,8 @@ class VMCodeWriter:
                 return self.pushTemp(index)
             elif segment == 'pointer':
                 return self.pushPointer(index)
+            elif segment == 'static':
+                return self.pushStatic(index)
         else:
             if segment in ['local','argument','this','that']:
                 return self.popLocArgThisThat(segment,index)
@@ -409,6 +410,8 @@ class VMCodeWriter:
                 return self.popTemp(index)
             elif segment == 'pointer':
                 return self.popPointer(index)
+            elif segment == 'static':
+                return self.popStatic(index)
 
     '''
     push local/argument/this/that
@@ -579,6 +582,49 @@ class VMCodeWriter:
         cmds += ["A=M\n"]
         cmds += ["D=M\n"]
         cmds += [f"@{pointer}\n"]
+        cmds += ["M=D\n"]
+
+        return cmds
+
+    '''
+    push static index
+    *sp = className.index; sp++
+    '''
+    def pushStatic(self, index):
+        addr = self.className+'.'+str(index)
+        cmds = [f"//push static {index}\n"]
+
+        cmds += ["//*SP=className.index\n"]
+        cmds += [f"@{addr}\n"]
+        cmds += ["D=M\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=D\n"]
+
+        cmds += ["//sp++\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M+1\n"]
+
+        return cmds
+
+    '''
+    pop static index
+    sp--;className.index=*sp
+    '''
+    def popStatic(self, index):
+        addr = self.className+'.'+str(index)
+        cmds = [f"//pop static {index}\n"]
+        
+        cmds += ["//SP--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+        
+        cmds += ["//className.index=*sp\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["D=M\n"]
+
+        cmds += [f"@{addr}\n"]
         cmds += ["M=D\n"]
 
         return cmds

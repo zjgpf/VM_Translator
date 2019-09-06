@@ -8,6 +8,7 @@ DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/MyTest/Sim
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/StackTest/StackTest.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/MemoryAccess/BasicTest/BasicTest.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/MemoryAccess/PointerTest/PointerTest.vm'
+DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/MemoryAccess/StaticTest/StaticTest.vm'
 
 class VMMain:
     def __init__(self, inputPath):
@@ -18,7 +19,7 @@ class VMMain:
         self.outputPath = inputPath.replace(fileName+'.vm', outputName)
 
         self.parser = VMParser(content)
-        self.codeWriter = VMCodeWriter()
+        self.codeWriter = VMCodeWriter(fileName)
 
         self.asmCmds = []
     
