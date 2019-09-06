@@ -401,7 +401,10 @@ class VMCodeWriter:
             elif segment == 'temp':
                 return self.pushTemp(index)
         else:
-            print(cmdType) 
+            if segment in ['local','argument','this','that']:
+                return self.popLocArgThisThat(segment,index)
+            elif segment == 'temp':
+                return self.popTemp(index)
 
     '''
     push local/argument/this/that
@@ -431,6 +434,36 @@ class VMCodeWriter:
         return cmds
         
     '''
+    pop local/argument/this/that
+    addr=segmentPointer+i;sp--;*addr=*sp;
+    '''
+    def popLocArgThisThat(self, segment, index):
+        pointer = SEGMENT_POINT_MAP[segment]
+        cmds = [f"//pop {segment} {index}\n"]
+
+        cmds += ["//addr=segmentPointer+i\n"]
+        cmds += [f"@{index}\n"]
+        cmds += ["D=A\n"]
+        cmds += [f"@{pointer}\n"]
+        cmds += ["D=M+D\n"]
+        cmds += ["@addr\n"]
+        cmds += ["M=D\n"]
+
+        cmds += ["//sp--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+        
+        cmds += ["//*addr=*sp\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["D=M\n"]
+        cmds += ["@addr\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=D\n"]
+        
+        return cmds
+
+    '''
     push temp
     D=5+i;*sp=*D;sp++
     '''
@@ -456,6 +489,35 @@ class VMCodeWriter:
         
         return cmds
         
+    '''
+    pop temp index
+    addr=5+i;sp--;*addr=*sp
+    '''
+    def popTemp(self,index):
+        cmds = [f"//pop temp {index}\n"]
+
+        cmds += ["//addr=5+i\n"]
+        cmds += [f"@{index}\n"]
+        cmds += ["D=A\n"]
+        cmds += [f"@5\n"]
+        cmds += ["D=A+D\n"]
+        cmds += ["@addr\n"]
+        cmds += ["M=D\n"]
+        
+        cmds += ["//sp--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+
+        cmds += ["//*addr=*sp\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["D=M\n"]
+        cmds += ["@addr\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=D\n"]
+
+        
+        return cmds
 
     '''
     push constant number

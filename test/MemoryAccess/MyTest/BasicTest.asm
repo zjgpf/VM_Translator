@@ -1,21 +1,62 @@
-//push local 5
-//D=segmentPointer+i
-@5
+//push constant 3
+//*sp=i
+@3
 D=A
-@LCL
-D=M+D
-//*sp=*D
-A=D
-D=M
 @SP
 A=M
 M=D
 //sp++
 @SP
 M=M+1
-//push temp 3
+//pop local 5
+//addr=segmentPointer+i
+@5
+D=A
+@LCL
+D=M+D
+@addr
+M=D
+//sp--
+@SP
+M=M-1
+//*addr=*sp
+@SP
+A=M
+D=M
+@addr
+A=M
+M=D
+//push constant 4
+//*sp=i
+@4
+D=A
+@SP
+A=M
+M=D
+//sp++
+@SP
+M=M+1
+//pop temp 1
+//addr=5+i
+@1
+D=A
+@5
+D=A+D
+@addr
+M=D
+//sp--
+@SP
+M=M-1
+//*addr=*sp
+@SP
+A=M
+D=M
+@addr
+A=M
+M=D
+//push temp 1
 //D=5+i
-@3
+@1
 D=A
 @5
 D=A+D
@@ -25,24 +66,6 @@ D=M
 @SP
 A=M
 M=D
-//sp++
-@SP
-M=M+1
-//add
-//sp--
-@SP
-M=M-1
-//D=*sp
-@SP
-A=M
-D=M
-//sp--
-@SP
-M=M-1
-//*sp=D+*sp 
-@SP
-A=M
-M=M+D
 //sp++
 @SP
 M=M+1

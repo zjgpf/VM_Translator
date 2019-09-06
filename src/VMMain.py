@@ -4,10 +4,9 @@ import sys
 import pdb
 
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/MemoryAccess/BasicTest/BasicTest.vm'
-DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/SimpleAdd/SimpleAdd.vm'
-DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/MyTest/SimpleAdd.vm'
-DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/StackTest/StackTest.vm'
-DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/MemoryAccess/MyTest/BasicTest.vm'
+#DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/SimpleAdd/SimpleAdd.vm'
+#DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/MyTest/SimpleAdd.vm'
+#DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/StackTest/StackTest.vm'
 
 class VMMain:
     def __init__(self, inputPath):
