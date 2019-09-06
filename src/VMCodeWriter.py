@@ -400,11 +400,15 @@ class VMCodeWriter:
                 return self.pushLocArgThisThat(segment,index)
             elif segment == 'temp':
                 return self.pushTemp(index)
+            elif segment == 'pointer':
+                return self.pushPointer(index)
         else:
             if segment in ['local','argument','this','that']:
                 return self.popLocArgThisThat(segment,index)
             elif segment == 'temp':
                 return self.popTemp(index)
+            elif segment == 'pointer':
+                return self.popPointer(index)
 
     '''
     push local/argument/this/that
@@ -515,7 +519,6 @@ class VMCodeWriter:
         cmds += ["@addr\n"]
         cmds += ["A=M\n"]
         cmds += ["M=D\n"]
-
         
         return cmds
 
@@ -536,4 +539,46 @@ class VMCodeWriter:
         cmds += ["//sp++\n"]
         cmds += ["@SP\n"]
         cmds += ["M=M+1\n"]
+        return cmds
+
+    '''
+    push pointer 0/1
+    *SP=THIS/THAT;SP++
+    '''
+    def pushPointer(self, index):
+        pointer = 'THIS' if str(index) == '0' else 'THAT'
+        cmds = [f"//push pointer {index}\n"]
+
+        cmds += ["//*SP=THIS/THAT\n"]
+        cmds += [f"@{pointer}\n"]
+        cmds += ["D=M\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=D\n"]
+
+        cmds += ["//SP++\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M+1\n"]
+
+        return cmds
+
+    '''
+    pop pointer 0/1
+    SP--;THIS/THAT=*SP
+    '''
+    def popPointer(self, index):
+        pointer = 'THIS' if str(index) == '0' else 'THAT'
+        cmds = [f"//pop pointer {index}\n"]
+
+        cmds += ["//SP--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+
+        cmds += ["//THIS/THAT=*SP\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["D=M\n"]
+        cmds += [f"@{pointer}\n"]
+        cmds += ["M=D\n"]
+
         return cmds
