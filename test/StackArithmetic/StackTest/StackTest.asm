@@ -34,21 +34,21 @@ M=M-1
 A=M
 D=M-D
 //go to eq if D=0
-@EQ0
+@StackTest_EQ0
 D;JEQ
 //*sp=0
 @SP
 A=M
 M=0
 //go to stop
-@STOP0
+@StackTest_STOP0
 0;JMP
-(EQ0)
+(StackTest_EQ0)
 //*sp=-1
 @SP
 A=M
 M=-1
-(STOP0)
+(StackTest_STOP0)
 //sp++
 @SP
 M=M+1
@@ -88,21 +88,21 @@ M=M-1
 A=M
 D=M-D
 //go to eq if D=0
-@EQ1
+@StackTest_EQ1
 D;JEQ
 //*sp=0
 @SP
 A=M
 M=0
 //go to stop
-@STOP1
+@StackTest_STOP1
 0;JMP
-(EQ1)
+(StackTest_EQ1)
 //*sp=-1
 @SP
 A=M
 M=-1
-(STOP1)
+(StackTest_STOP1)
 //sp++
 @SP
 M=M+1
@@ -142,21 +142,21 @@ M=M-1
 A=M
 D=M-D
 //go to eq if D=0
-@EQ2
+@StackTest_EQ2
 D;JEQ
 //*sp=0
 @SP
 A=M
 M=0
 //go to stop
-@STOP2
+@StackTest_STOP2
 0;JMP
-(EQ2)
+(StackTest_EQ2)
 //*sp=-1
 @SP
 A=M
 M=-1
-(STOP2)
+(StackTest_STOP2)
 //sp++
 @SP
 M=M+1
@@ -196,21 +196,21 @@ M=M-1
 A=M
 D=M-D
 //go to lt if D=0
-@Lt3
+@StackTest_Lt3
 D;JLT
 //*sp=0
 @SP
 A=M
 M=0
 //go to stop
-@STOP3
+@StackTest_STOP3
 0;JMP
-(Lt3)
+(StackTest_Lt3)
 //*sp=-1
 @SP
 A=M
 M=-1
-(STOP3)
+(StackTest_STOP3)
 //sp++
 @SP
 M=M+1
@@ -250,21 +250,21 @@ M=M-1
 A=M
 D=M-D
 //go to lt if D=0
-@Lt4
+@StackTest_Lt4
 D;JLT
 //*sp=0
 @SP
 A=M
 M=0
 //go to stop
-@STOP4
+@StackTest_STOP4
 0;JMP
-(Lt4)
+(StackTest_Lt4)
 //*sp=-1
 @SP
 A=M
 M=-1
-(STOP4)
+(StackTest_STOP4)
 //sp++
 @SP
 M=M+1
@@ -304,21 +304,21 @@ M=M-1
 A=M
 D=M-D
 //go to lt if D=0
-@Lt5
+@StackTest_Lt5
 D;JLT
 //*sp=0
 @SP
 A=M
 M=0
 //go to stop
-@STOP5
+@StackTest_STOP5
 0;JMP
-(Lt5)
+(StackTest_Lt5)
 //*sp=-1
 @SP
 A=M
 M=-1
-(STOP5)
+(StackTest_STOP5)
 //sp++
 @SP
 M=M+1
@@ -358,21 +358,21 @@ M=M-1
 A=M
 D=M-D
 //go to gt if D>0
-@GT6
+@StackTest_GT6
 D;JGT
 //*sp=0
 @SP
 A=M
 M=0
 //go to stop
-@STOP6
+@StackTest_STOP6
 0;JMP
-(GT6)
+(StackTest_GT6)
 //*sp=-1
 @SP
 A=M
 M=-1
-(STOP6)
+(StackTest_STOP6)
 //sp++
 @SP
 M=M+1
@@ -412,21 +412,21 @@ M=M-1
 A=M
 D=M-D
 //go to gt if D>0
-@GT7
+@StackTest_GT7
 D;JGT
 //*sp=0
 @SP
 A=M
 M=0
 //go to stop
-@STOP7
+@StackTest_STOP7
 0;JMP
-(GT7)
+(StackTest_GT7)
 //*sp=-1
 @SP
 A=M
 M=-1
-(STOP7)
+(StackTest_STOP7)
 //sp++
 @SP
 M=M+1
@@ -466,21 +466,21 @@ M=M-1
 A=M
 D=M-D
 //go to gt if D>0
-@GT8
+@StackTest_GT8
 D;JGT
 //*sp=0
 @SP
 A=M
 M=0
 //go to stop
-@STOP8
+@StackTest_STOP8
 0;JMP
-(GT8)
+(StackTest_GT8)
 //*sp=-1
 @SP
 A=M
 M=-1
-(STOP8)
+(StackTest_STOP8)
 //sp++
 @SP
 M=M+1

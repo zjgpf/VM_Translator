@@ -5,10 +5,12 @@ import pdb
 
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/SimpleAdd/SimpleAdd.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/MyTest/SimpleAdd.vm'
-DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/StackTest/StackTest.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/MemoryAccess/BasicTest/BasicTest.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/MemoryAccess/PointerTest/PointerTest.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/MemoryAccess/StaticTest/StaticTest.vm'
+DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/StackTest/StackTest.vm'
+DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/ProgramFlow/BasicLoop/BasicLoop.vm'
+DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/ProgramFlow/FibonacciSeries/FibonacciSeries.vm'
 
 class VMMain:
     def __init__(self, inputPath):
@@ -38,6 +40,19 @@ class VMMain:
             elif commandType == 'C_ARITHMETIC':
                 cmd = parser.arg1()
                 asmCmds += codeWriter.writeArithmetic(cmd)
+
+            elif commandType == 'C_LABEL':
+                cmd = parser.arg1()
+                asmCmds += codeWriter.writeLabel(cmd)
+
+            elif commandType == 'C_GOTO':
+                cmd = parser.arg1()
+                asmCmds += codeWriter.writeGoto(cmd)
+
+            elif commandType == 'C_IF':
+                cmd = parser.arg1()
+                asmCmds += codeWriter.writeIf(cmd)
+            
         with open(self.outputPath, 'w') as f:
             f.write(''.join(asmCmds))
          

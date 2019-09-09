@@ -97,8 +97,8 @@ class VMCodeWriter:
     '''
     def writeEq(self):    
         global label_count
-        LABEL_EQ = "EQ"+str(label_count)
-        LABEL_STOP = "STOP"+str(label_count)
+        LABEL_EQ = self.className+'_'+"EQ"+str(label_count)
+        LABEL_STOP = self.className+ '_'+"STOP"+str(label_count)
         label_count+=1
 
         cmds = ["//Eq\n"]
@@ -162,8 +162,8 @@ class VMCodeWriter:
     '''
     def writeLt(self):    
         global label_count
-        LABEL_LT = "Lt"+str(label_count)
-        LABEL_STOP = "STOP"+str(label_count)
+        LABEL_LT = self.className+'_'+"Lt"+str(label_count)
+        LABEL_STOP = self.className+'_'+"STOP"+str(label_count)
         label_count+=1
 
         cmds = ["//Lt\n"]
@@ -227,8 +227,8 @@ class VMCodeWriter:
     '''
     def writeGt(self):    
         global label_count
-        LABEL_GT = "GT"+str(label_count)
-        LABEL_STOP = "STOP"+str(label_count)
+        LABEL_GT = self.className+'_'+"GT"+str(label_count)
+        LABEL_STOP = self.className+'_'+"STOP"+str(label_count)
         label_count+=1
 
         cmds = ["//Gt\n"]
@@ -628,3 +628,36 @@ class VMCodeWriter:
         cmds += ["M=D\n"]
 
         return cmds
+
+    def writeLabel(self,label):
+        cmds = [f"//label {label}\n"]
+        cmds += [f"({label})\n"]
+
+        return cmds
+
+    def writeGoto(self,label):
+        cmds = [f"//goto {label}\n"]
+        cmds += [f"@{label}\n"]
+        cmds += ["0;JMP\n"]
+
+        return cmds
+
+    '''
+    SP--;D=*SP;@label;D;JGT
+    '''
+    def writeIf(self,label):
+        cmds = [f"//if-goto {label}\n"]
+        cmds += ["//SP--\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+        cmds += ["//D=*SP\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["D=M\n"]
+        cmds += [f"@{label}\n"]
+        cmds += ["D;JGT\n"]
+        
+        return cmds
+
+        
+

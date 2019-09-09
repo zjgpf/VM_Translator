@@ -49,6 +49,9 @@ class VMParser:
         if _type == 'push': return 'C_PUSH'
         elif _type == 'pop': return 'C_POP'
         elif _type in ARITHMETIC_LOGICAL_COMMANDS: return 'C_ARITHMETIC'
+        elif _type == 'label': return 'C_LABEL'
+        elif _type == 'goto': return 'C_GOTO'
+        elif _type == 'if-goto': return 'C_IF'
 
     def arg1(self):
         if self.commandType() == 'C_ARITHMETIC': return self.curCmdArr[0]
