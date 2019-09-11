@@ -655,7 +655,7 @@ class VMCodeWriter:
         cmds += ["A=M\n"]
         cmds += ["D=M\n"]
         cmds += [f"@{label}\n"]
-        cmds += ["D;JGT\n"]
+        cmds += ["D;JNE\n"]
         
         return cmds
 
