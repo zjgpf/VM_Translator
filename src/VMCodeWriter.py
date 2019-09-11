@@ -659,5 +659,85 @@ class VMCodeWriter:
         
         return cmds
 
-        
+    '''
+    (functionName)
+    repeat nVar times: push 0
+    '''
+    def writeFunction(self, functionName, numVars):
+        cmds = [f"//functon {functionName} {numVars}\n"]
+        cmds += [f"({functionName})\n"]
+        cmds += [f"//repeat {numVars} times: push 0\n"]
+        numVars = int(numVars)
+        while numVars != 0:
+            cmds += self.writePushPop('C_PUSH','constant',0)
+            numVars-=1
 
+        return cmds
+
+    def writeCall(self, functionName, numArgs):
+        pass
+
+        '''
+        endFrame=LCL
+        retAddr=*(endFrame-5)
+        *ARG=pop()
+        sp=ARG+1
+        THAT=*(endFrame-1)
+        THIS=*(endFrame-2)
+        ARG=*(endFrame-3)
+        LCL=*(endFrame-4)
+        goto retAddr
+        '''
+    def writeReturn(self):
+        cmds = ["//return\n"]
+
+        cmds += ["//endFrame=LCL\n"]
+        cmds += ["@LCL\n"]
+        cmds += ["D=M\n"]
+        cmds += ["@endFrame\n"]
+        cmds += ["M=D\n"]
+
+        cmds += ["//retAddr=*(endFrame-5)\n"]
+        cmds += ["@endFrame\n"]
+        cmds += ["D=M\n"]
+        cmds += ["@5\n"]
+        cmds += ["A=D-A\n"]
+        cmds += ["D=M\n"]
+        cmds += ["@retAddr\n"]
+        cmds += ["M=D\n"]
+
+        cmds += ["//*ARG=pop()\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M-1\n"]
+        cmds += ["A=M\n"]
+        cmds += ["D=M\n"]
+        cmds += ["@ARG\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=D\n"]
+
+        cmds += ["//SP=ARG+1\n"]
+        cmds += ["@ARG\n"]
+        cmds += ["D=M+1\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=D\n"]
+
+        for i,v in enumerate(['THAT','THIS','ARG','LCL']):
+            offset = i+1
+            cmds += [f"//{v}=*(endFrame-{offset})\n"]
+            cmds += ["@endFrame\n"]
+            cmds += ["D=M\n"]
+            cmds += [f"@{offset}\n"]
+            cmds += ["A=D-A\n"]
+            cmds += ["D=M\n"]
+            cmds += [f"@{v}\n"]
+            cmds += ["M=D\n"]
+
+        cmds += ["//goto retAddr\n"]
+        cmds += ["@retAddr\n"]
+        cmds += ["A=M\n"]
+        cmds += ["0;JMP\n"]
+
+        return cmds
+        
+    def writeInit(self):
+        pass

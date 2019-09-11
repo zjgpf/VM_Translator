@@ -52,6 +52,9 @@ class VMParser:
         elif _type == 'label': return 'C_LABEL'
         elif _type == 'goto': return 'C_GOTO'
         elif _type == 'if-goto': return 'C_IF'
+        elif _type == 'function': return 'C_FUNCTION'
+        elif _type == 'call': return 'C_CALL'
+        elif _type == 'return': return 'C_RETURN'
 
     def arg1(self):
         if self.commandType() == 'C_ARITHMETIC': return self.curCmdArr[0]

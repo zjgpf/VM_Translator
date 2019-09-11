@@ -11,6 +11,7 @@ DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/MemoryAccess/StaticTest/St
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/StackTest/StackTest.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/ProgramFlow/BasicLoop/BasicLoop.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/ProgramFlow/FibonacciSeries/FibonacciSeries.vm'
+DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/FunctionCalls/SimpleFunction/SimpleFunction.vm'
 
 class VMMain:
     def __init__(self, inputPath):
@@ -52,6 +53,17 @@ class VMMain:
             elif commandType == 'C_IF':
                 cmd = parser.arg1()
                 asmCmds += codeWriter.writeIf(cmd)
+
+            elif commandType == 'C_FUNCTION':
+                functionName,numVars = parser.arg1(),parser.arg2()
+                asmCmds += codeWriter.writeFunction(functionName, numVars)
+
+            elif commandType == 'C_CALL':
+                functionName,numArgs = parser.arg1(),parser.arg2()
+                asmCmds += codeWriter.writeCall(functionName, numArgs)
+
+            elif commandType == 'C_RETURN':
+                asmCmds += codeWriter.writeReturn()
             
         with open(self.outputPath, 'w') as f:
             f.write(''.join(asmCmds))
