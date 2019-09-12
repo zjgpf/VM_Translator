@@ -14,6 +14,7 @@ DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/ProgramFlow/BasicLoop/Basi
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/ProgramFlow/FibonacciSeries/FibonacciSeries.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/FunctionCalls/SimpleFunction/SimpleFunction.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/FunctionCalls/FibonacciElement'
+DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/FunctionCalls/StaticsTest'
 
 class VMMain:
     def __init__(self, inputPath):
