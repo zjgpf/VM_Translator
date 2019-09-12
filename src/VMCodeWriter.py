@@ -5,6 +5,19 @@ class VMCodeWriter:
         #className for static field
         self.className = className
 
+    '''
+    SP = 256
+    call Sys.init
+    '''
+    def writeInit(self):
+        cmds = ["//init\n"]
+        cmds += ["@256\n"]
+        cmds += ["D=A\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=D\n"]
+        cmds += self.writeCall('Sys.init', '0')
+        return cmds
+
     def writeArithmetic(self, cmd):
         if cmd == 'add': return self.writeAdd() 
         elif cmd == 'sub': return self.writeSub() 
@@ -692,7 +705,7 @@ class VMCodeWriter:
         
         cmds = [f"//call {functionName} {numArgs}\n"]
         
-        //push {retAddrLabel}
+        cmds += [f"//push {retAddrLabel}\n"]
         cmds += [f"@{retAddrLabel}\n"]
         cmds += ["D=A\n"]
         cmds += ["@SP\n"]
@@ -702,7 +715,7 @@ class VMCodeWriter:
         cmds += ["M=M+1\n"]
 
         for v in ['LCL', 'ARG', 'THIS', 'THAT']:
-            cmds += ["//push {v}\n"]
+            cmds += [f"//push {v}\n"]
             cmds += [f"@{v}\n"]
             cmds += ["D=M\n"]
             cmds += ["@SP\n"]
@@ -727,11 +740,11 @@ class VMCodeWriter:
         cmds += ["@LCL\n"]
         cmds += ["M=D\n"]
 
-        //goto functionName
-        cmds += ["@{functionName}\n"]
+        cmds += [f"//goto {functionName}\n"]
+        cmds += [f"@{functionName}\n"]
         cmds += ["0;JMP\n"]
         
-        cmds += ["{retAddrLabel}\n"]
+        cmds += [f"({retAddrLabel})\n"]
         
         return cmds
         
@@ -797,5 +810,3 @@ class VMCodeWriter:
 
         return cmds
         
-    def writeInit(self):
-        pass

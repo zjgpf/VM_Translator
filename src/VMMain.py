@@ -1,6 +1,7 @@
 from VMParser import VMParser
 from VMCodeWriter import VMCodeWriter
 import sys
+import os
 import pdb
 
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/SimpleAdd/SimpleAdd.vm'
@@ -12,23 +13,60 @@ DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/StackArithmetic/StackTest/
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/ProgramFlow/BasicLoop/BasicLoop.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/ProgramFlow/FibonacciSeries/FibonacciSeries.vm'
 DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/FunctionCalls/SimpleFunction/SimpleFunction.vm'
+DEFAULTPATH='/Users/pengfeigao/git/vm_translator/test/FunctionCalls/FibonacciElement'
 
 class VMMain:
     def __init__(self, inputPath):
-        with open(inputPath, 'r') as f:
-            content = f.read()
-        fileName = inputPath.split('/')[-1][:-3]
-        outputName = fileName+'.asm'
-        self.outputPath = inputPath.replace(fileName+'.vm', outputName)
+        isDir = True
+        if inputPath[-3:] == '.vm': isDir = False
+        self.isDir = isDir
 
-        self.parser = VMParser(content)
-        self.codeWriter = VMCodeWriter(fileName)
+        if not isDir:
+            with open(inputPath, 'r') as f:
+                self.content = f.read()
+            fileName = inputPath.split('/')[-1][:-3]
+            self.className = fileName
+            outputName = fileName+'.asm'
+            self.outputPath = inputPath.replace(fileName+'.vm', outputName)
+
+        else:
+            contents = {}
+            self.fileName = inputPath.split('/')[-1] + '.asm'
+            self.outputPath = os.path.join(inputPath,self.fileName)
+            files = os.listdir(inputPath)   
+            for file in files:
+                if not file[-3:] == '.vm': continue
+                with open(os.path.join(inputPath,file), 'r') as f:
+                    contents[file[:-3]] = f.read()
+            
+            self.contents = contents
 
         self.asmCmds = []
     
     def run(self):
-        parser = self.parser
-        codeWriter = self.codeWriter
+        if not self.isDir: self.runSingleFile()
+        else: self.runDir()
+
+    def runDir(self):
+        contents = self.contents       
+        asmCmds = self.asmCmds
+        initClassName = self.fileName[:-3]
+        codeWriter = VMCodeWriter(initClassName)
+        self.asmCmds += codeWriter.writeInit()
+
+        for className, content in contents.items():
+            self.content = content
+            self.className = className
+            self.runSingleFile(False)
+        
+        with open(self.outputPath, 'w') as f:
+            f.write(''.join(asmCmds))
+        
+        
+
+    def runSingleFile(self, isWrite=True):
+        parser = VMParser(self.content)
+        codeWriter = VMCodeWriter(self.className)
         asmCmds = self.asmCmds
         while(parser.hasMoreCommands()):
             parser.advance()
@@ -65,8 +103,9 @@ class VMMain:
             elif commandType == 'C_RETURN':
                 asmCmds += codeWriter.writeReturn()
             
-        with open(self.outputPath, 'w') as f:
-            f.write(''.join(asmCmds))
+        if isWrite:
+            with open(self.outputPath, 'w') as f:
+                f.write(''.join(asmCmds))
          
         
 
