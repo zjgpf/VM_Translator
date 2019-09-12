@@ -674,9 +674,67 @@ class VMCodeWriter:
 
         return cmds
 
+    '''
+    push retAddrLabel 
+    push LCL
+    push ARG
+    push THIS
+    push THAT
+    ARG = SP-5-nArgs 
+    LCL = SP
+    goto functionName
+    (retAddrLabel)
+    '''
     def writeCall(self, functionName, numArgs):
-        pass
+        global label_count
+        retAddrLabel = self.className+'$'+'ret'+'.'+str(label_count)
+        label_count += 1
+        
+        cmds = [f"//call {functionName} {numArgs}\n"]
+        
+        //push {retAddrLabel}
+        cmds += [f"@{retAddrLabel}\n"]
+        cmds += ["D=A\n"]
+        cmds += ["@SP\n"]
+        cmds += ["A=M\n"]
+        cmds += ["M=D\n"]
+        cmds += ["@SP\n"]
+        cmds += ["M=M+1\n"]
 
+        for v in ['LCL', 'ARG', 'THIS', 'THAT']:
+            cmds += ["//push {v}\n"]
+            cmds += [f"@{v}\n"]
+            cmds += ["D=M\n"]
+            cmds += ["@SP\n"]
+            cmds += ["A=M\n"]
+            cmds += ["M=D\n"]
+            cmds += ["@SP\n"]
+            cmds += ["M=M+1\n"]
+
+        cmds += ["//ARG = SP-5-nArgs\n"]
+        cmds += ["@SP\n"]
+        cmds += ["D=M\n"]
+        cmds += ["@5\n"]
+        cmds += ["D=D-A\n"]
+        cmds += [f"@{numArgs}\n"]
+        cmds += ["D=D-A\n"]
+        cmds += ["@ARG\n"]
+        cmds += ["M=D\n"]
+
+        cmds += ["//LCL = SP\n"]
+        cmds += ["@SP\n"]
+        cmds += ["D=M\n"]
+        cmds += ["@LCL\n"]
+        cmds += ["M=D\n"]
+
+        //goto functionName
+        cmds += ["@{functionName}\n"]
+        cmds += ["0;JMP\n"]
+        
+        cmds += ["{retAddrLabel}\n"]
+        
+        return cmds
+        
         '''
         endFrame=LCL
         retAddr=*(endFrame-5)
